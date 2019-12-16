@@ -1,3 +1,9 @@
+@mixin flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -34,25 +40,23 @@ h3 {
     margin: 0 0 30px 30px;
     font-size: 20px;
   }
-  &__active-tasks {
-    width: 100%;
+  &__active-tasks,
+  &__completed-tasks {
+    width: calc(100% - 30px);
   }
   &__active-task {
-    width: calc(100% - 42px);
     margin-bottom: 20px;
   }
-  &__completed-tasks {
-
+  &__completed-task {
+    text-decoration: line-through;
   }
   &__add-task-container {
+    @include flex-space-between();
     width: 100%;
-    display: flex;
-    align-items: center;
     margin-bottom: 30px;
   }
-  &__task-container {
-    display: flex;
-    justify-content: space-between;
+  &__task-row {
+    @include flex-space-between();
   }
   &__input {
     width: 90%;

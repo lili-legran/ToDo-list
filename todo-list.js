@@ -1,37 +1,64 @@
 const addButton = document.querySelector('.todo-list__add-button');
-const toDoInput = document.querySelector('.todo-list__input')
+const toDoInput = document.querySelector('.todo-list__input');
+const activeTasksList = document.querySelector('.todo-list__active-tasks');
+const completedTasksList = document.querySelector('.todo-list__completed-tasks');
 
 const addNewTask = () => {
-  let newTask = document.createElement('li');
+  const newTaskLi = setTaskRow();
+  addTaskToActiveList(newTaskLi, activeTasksList);
+  clearInputValue();
+}
+
+const setTaskRow = () => {
+  const newTask = document.createElement('li');
   newTask.classList.add('todo-list__active-task');
 
-  let inputValue = toDoInput.value;
-  let newTaskContainer = document.createElement('div');
-  newTaskContainer.classList.add('todo-list__task-container');
+  const inputValue = toDoInput.value;
+  const newTaskContainer = document.createElement('div');
+  newTaskContainer.classList.add('todo-list__task-row');
   newTask.appendChild(newTaskContainer);
 
-  let newTaskValue = document.createElement('span');
+  const newTaskValue = document.createElement('span');
   newTaskValue.innerText = inputValue;
-  let completeButton = document.createElement('button');
+  const completeButton = document.createElement('button');
   completeButton.innerHTML = '&#x2714;';
   completeButton.classList.add('todo-list__complete-button');
+  completeButton.addEventListener('click', completeTask);
   
   newTaskContainer.appendChild(newTaskValue);
   newTaskContainer.appendChild(completeButton);
 
-  let activeTasksList = document.querySelector('.todo-list__active-tasks');
-  let firstChild = activeTasksList.firstChild;
+  return newTask;
+}
+
+const addTaskToActiveList = (newTask, tasksList) => {
+  const firstChild = tasksList.firstChild;
   if (firstChild) {
-    activeTasksList.insertBefore(newTask, firstChild);
+    tasksList.insertBefore(newTask, firstChild);
   } else {
-    activeTasksList.appendChild(newTask);
+    tasksList.appendChild(newTask);
   }
-  clearInputValue();
 }
 
 const clearInputValue = () => {
   toDoInput.value = '';
 }
+
+const completeTask = function () {
+  const curentTaskDiv = this.parentNode;
+  const currentTaskLi = curentTaskDiv.parentNode;
+  const completeButtonInCompletedList = curentTaskDiv.querySelector('button');
+  completeButtonInCompletedList.remove();
+  currentTaskLi.remove();
+  currentTaskLi.classList.add('todo-list__completed-task');
+  addTaskToActiveList(currentTaskLi, completedTasksList);
+}
+
+toDoInput.addEventListener('keyup', function(event) {
+  if (event.keyCode === 13) {
+    addNewTask();
+  }
+});
 
 addButton.addEventListener('click', addNewTask);
 
